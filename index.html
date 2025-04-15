@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генератор листів з трекером</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2rem; }
+    textarea, input { width: 100%; padding: 0.5rem; margin: 0.5rem 0; }
+    .output { background: #f0f0f0; padding: 1rem; white-space: pre-wrap; word-break: break-word; }
+    button { padding: 0.5rem 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Генератор HTML-листів з трекером</h1>
+  <label for="message">Текст листа:</label>
+  <textarea id="message" rows="6" placeholder="Введіть ваш текст..."></textarea>
+
+  <label for="tracker">URL трекера (1x1 піксель):</label>
+  <input type="text" id="tracker" placeholder="https://i.imgur.com/abc123.png" />
+
+  <button onclick="generate()">Згенерувати HTML</button>
+
+  <h2>Готовий HTML-код:</h2>
+  <div class="output" id="output"></div>
+  <button onclick="copyOutput()">📋 Копіювати в буфер</button>
+
+  <script>
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;")
+                 .replace(/\n/g, "<br>");
+    }
+
+    function generate() {
+      const message = document.getElementById('message').value;
+      const tracker = document.getElementById('tracker').value;
+      const html = `<div>
+  <p>${escapeHtml(message)}</p>
+  <img src="${tracker}" width="1" height="1" style="display:none;" />
+</div>`;
+      document.getElementById('output').textContent = html;
+    }
+
+    function copyOutput() {
+      const output = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(output).then(() => alert('Скопійовано!'));
+    }
+  </script>
+</body>
+</html>
